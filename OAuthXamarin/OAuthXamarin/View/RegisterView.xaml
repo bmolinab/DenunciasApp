@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OAuthXamarin.View.RegisterView"
+             xmlns:imagen="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             Title="Registro"
+             BackgroundColor="{StaticResource MainColor}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="primary">#ff3a33</Color>
+            <Color x:Key="MainColor">#FFFFFF</Color>
+            <Color x:Key="FontColor">#000000</Color>
+            <Color x:Key="AccentColor1">#9E9E9E</Color>
+            <Color x:Key="AccentColor2">#1976D2</Color>
+            <Color x:Key="BackgroundColor">#F7F7F7</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Padding="5" Spacing="5">
+            <Label HeightRequest="110"  
+                          HorizontalOptions="FillAndExpand" 
+                          Text="AppDenuncias" 
+                          BackgroundColor="{StaticResource AccentColor2}"
+                          TextColor="{StaticResource MainColor}"
+                          FontSize="40" 
+                          HorizontalTextAlignment="Center"
+                          VerticalTextAlignment="Center"/>
+            <BoxView
+            Color="{StaticResource AccentColor2}"
+            HeightRequest="2">
+            </BoxView>
+            <StackLayout Orientation="Horizontal">
+                <imagen:CircleImage Source="ic_camera.png" WidthRequest="80" HeightRequest="80" VerticalOptions="Center"/>
+                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label 
+                            Text="Usuario" 
+                            FontSize="Small"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            WidthRequest="115"
+                        />
+
+                        <Entry x:Name="usernameEntry" 
+                               Placeholder="@JosePerez94" 
+                               Text="{Binding UserData.UserName,Mode=TwoWay}" 
+                               FontSize="Small"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"
+                        />
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label Text="Nombre y Apellido" 
+                               FontSize="Small" 
+                               HorizontalOptions="Start"
+                               VerticalOptions="Center"
+                               WidthRequest="115"
+                               />
+                        <Entry Placeholder="Nombre" 
+                               HorizontalOptions="Center" 
+                               Text="{Binding UserData.FristName,Mode=TwoWay}" 
+                               FontSize="Small"
+                               VerticalOptions="Center"/>
+                        <Entry Placeholder="Apellido" 
+                               HorizontalOptions="End" 
+                               Text="{Binding UserData.LastName,Mode=TwoWay}" 
+                               FontSize="Small"
+                               VerticalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <Label Text="Contraseña"/>
+            <Entry x:Name="passwordEntry" IsPassword="true" Placeholder="*****" Text="{Binding UserData.Password,Mode=TwoWay}"/>
+            <Label Text="Verificar Contraseña"/>
+            <Entry x:Name="passwordEntry2" IsPassword="true" Placeholder="*****" />
+            <Label Text="Correo Electronico"/>
+            <Entry x:Name="emailEntry" Text="{Binding UserData.Email,Mode=TwoWay}" Placeholder="joseperez@mail.com"/>
+            <Button 
+                Text="Registrar"
+                BackgroundColor="{StaticResource AccentColor2}"
+                TextColor="{StaticResource MainColor}"
+                Command="{Binding RegisterCommand}">
+            </Button>
+            <Label x:Name="messageLabel" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

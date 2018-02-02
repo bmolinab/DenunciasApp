@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Local="clr-namespace:OAuthXamarin;assembly=OAuthXamarin"
+             xmlns:Controls="clr-namespace:OAuthXamarin.Controls;assembly=OAuthXamarin"
+             x:Class="OAuthXamarin.View.NewPostView">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Grid HeightRequest="{x:Static Local:Measurements.ProportionalViewSize}" ColumnSpacing="0" RowSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Column="0" Grid.Row="0" Source="searchpage.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="10">
+                       
+                    </Image>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Nueva Denuncia" FontAttributes="Bold" FontSize="Large" FontFamily="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                </Grid>
+                <Image HeightRequest="{x:Static Local:Measurements.HalfScreenHeight}" Source="{Binding ImageSource}" Margin="0,10" />
+                <StackLayout Orientation="Horizontal">
+                <Image Source="location.png" WidthRequest="20" HeightRequest="20"></Image>
+                <Label Text="Quito, 01/02/2018" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Controls:BindablePicker
+                         Title="Seleccione la categoria"
+                         DisplayMemberPath="Name"
+                         SelectedValuePath="IdCategory"
+                         SelectedItem="{Binding CatSelectedItem, Mode=TwoWay}"
+                         ItemsSource="{Binding Category}"                        
+                        />
+                    <Controls:BindablePicker
+                         Title="Seleccione la subcategoria"
+                         DisplayMemberPath="Name"
+                         SelectedValuePath="IdSubcategory"
+                         ItemsSource="{Binding Subcategory}"                        
+                        />
+
+                </StackLayout>
+                <Entry Text="" Placeholder="Título" />
+                
+                <Entry Text="" Placeholder="Descripción" />
+
+                <Button x:Name="SaveBtn" Text="Denunciar" Command="{Binding PostCommand}"/>
+                
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

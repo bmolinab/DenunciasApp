@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:OAuthXamarin"
+             x:Class="OAuthXamarin.View.LoginView"
+             BackgroundColor="{StaticResource MainColor}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="primary">#ff3a33</Color>
+            <Color x:Key="MainColor">#FFFFFF</Color>
+            <Color x:Key="FontColor">#000000</Color>
+            <Color x:Key="AccentColor1">#9E9E9E</Color>
+            <Color x:Key="AccentColor2">#1976D2</Color>
+            <Color x:Key="BackgroundColor">#F7F7F7</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <StackLayout  Padding="5" Spacing="5">
+
+        <Label HeightRequest="110"  
+                          HorizontalOptions="FillAndExpand" 
+                          Text="AppDenuncias" 
+                          BackgroundColor="{StaticResource AccentColor2}"
+                          TextColor="{StaticResource MainColor}"
+                          FontSize="40" 
+                          HorizontalTextAlignment="Center"
+                          VerticalTextAlignment="Center"/>
+
+        <Entry  Margin="20,40,20,0" 
+                         HeightRequest="50" 
+                         Placeholder="Email">
+        </Entry>
+
+        <Entry Margin="20,0,20,0" 
+                        HeightRequest="50" IsPassword="true"
+                        Placeholder="Password">
+        </Entry>
+
+        <Button Margin="20,0,20,0" 
+                         HeightRequest="50" 
+                         TextColor="White" 
+                         Text="Ingresar"  
+                         BackgroundColor="{StaticResource AccentColor2}"
+                         HorizontalOptions="FillAndExpand"
+                            />
+
+        <Button Margin="20,0,20,0" 
+                         HeightRequest="50" 
+                         TextColor="White" 
+                         Text="Registrar" 
+                Command="{Binding RegisterCommand}"
+                         BackgroundColor="{StaticResource AccentColor2}"
+                         HorizontalOptions="FillAndExpand"/>
+
+
+        <Label Text="Ingresar con:" 
+                        HorizontalOptions="Center" 
+                        TextColor="{StaticResource AccentColor2}"/>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+
+            <Image Source="ic_facebook.png"  WidthRequest="50" HeightRequest="50">
+                <Image.GestureRecognizers>
+
+                    <TapGestureRecognizer Command="{Binding FacebookLoginCommand} "/>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Image Source="ic_twitter.png" WidthRequest="50" HeightRequest="50">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TwitterLoginCommand} "/>
+
+                </Image.GestureRecognizers>
+            </Image>
+
+        </StackLayout>
+
+        <Label Text="Recuperar Contraseña" 
+                        HorizontalOptions="Center" 
+                        TextColor="{StaticResource AccentColor2}"/>
+        
+
+    </StackLayout>
+
+    </ContentPage.Content>
+
+    <!--<StackLayout BackgroundColor="White" Padding="15">
+        
+        <Button Text="Login Facebook" Command="{Binding FacebookLoginCommand}"/>
+        <Button Text="Login Twitter" Command="{Binding TwitterLoginCommand}" />
+    </StackLayout>-->
+</ContentPage>

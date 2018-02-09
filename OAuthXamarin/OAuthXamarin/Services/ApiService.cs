@@ -9,23 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 using OAuthXamarin.Helpers;
 using System.IO;
+using System.Diagnostics;
 
 namespace OAuthXamarin.Services
 {
     public class ApiService
     {
 
-        public async Task<Response> Login(string username, string password)
+        public async Task<Response> Login(UserC usuario)
         {
             try
             {
-                var usarioRqst = new UserC
-                {
-                    UserName = username,
-                    Password = password,
-                };
+               
 
-                var request = JsonConvert.SerializeObject(usarioRqst);
+                var request = JsonConvert.SerializeObject(usuario);
                 var content = new StringContent(request, Encoding.UTF8, "application/json");
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(Constants.ServiceUrl);
@@ -77,11 +74,16 @@ namespace OAuthXamarin.Services
                         IsSuccess = false,
                         Message = "Usuario o Contraseña incorrecto",
                     };
+
                 }
                 var result = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<Response>(result);
+                var user = JsonConvert.DeserializeObject<UserC>(result);
                 
-                return user;
+                
+                return new Response {
+                    IsSuccess=true,
+                    Message="UserData",
+                    Result = user };
             }
             catch (Exception ex)
             {
@@ -94,16 +96,33 @@ namespace OAuthXamarin.Services
             }
 
         }
-        public async Task<Response> PostComplain(Complain denuncia)
+        public async Task<Response> PostComplain(Complain denuncia, DataFile photo)
         {
             try
             {
-                var request = JsonConvert.SerializeObject(denuncia);
-                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var requestphoto = JsonConvert.SerializeObject(photo);
+                var contentphoto = new StringContent(requestphoto, Encoding.UTF8, "application/json");
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(Constants.ServiceUrl);
+                var urlphoto = Constants.Denuncia + "UploadComplainPicture";
+                var responsephoto = await client.PostAsync(urlphoto, contentphoto);
+                if (!responsephoto.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = "error con la foto",
+                    };
+                }
+                var resultphoto = await responsephoto.Content.ReadAsStringAsync();
+                var photodata = JsonConvert.DeserializeObject<Response>(resultphoto);
+                denuncia.Photo = Constants.ServiceUrl + "/" + photodata.Message;
+
+                var request = JsonConvert.SerializeObject(denuncia);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
                 var url = Constants.Denuncia + "PostComplain";
                 var response = await client.PostAsync(url, content);
+
                 if (!response.IsSuccessStatusCode)
                 {
                     return new Response
@@ -112,10 +131,15 @@ namespace OAuthXamarin.Services
                         Message = "Denuncia inCorrecta",
                     };
                 }
-                var result = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<Response>(result);
 
-                return user;
+                var result = await response.Content.ReadAsStringAsync();
+                var DenunciaResponse = JsonConvert.DeserializeObject<Response>(result);
+                if (DenunciaResponse.IsSuccess)
+                {
+                    Debug.WriteLine("funciona");
+                }
+                
+                return DenunciaResponse;
             }
             catch (Exception ex)
             {
@@ -127,11 +151,7 @@ namespace OAuthXamarin.Services
                 throw;
             }
 
-            return new Response { };
         }
-
-
-
         //public async Task <Response> GetCategory()
         //{
         //    var client = new HttpClient();
@@ -150,7 +170,6 @@ namespace OAuthXamarin.Services
         //    var categorias = JsonConvert.DeserializeObject<Response>(result);
         //    return categorias;
         //}
-
         public async Task<List<Category>> GetCategory()
         {
             try
@@ -168,7 +187,6 @@ namespace OAuthXamarin.Services
                 return null;
             }
         }
-
         public async Task<List<Subcategory>> GetSubCategoryByCategory(Category categoria)
         {
             try
@@ -195,54 +213,6 @@ namespace OAuthXamarin.Services
             }
 
         }
-
-
-        public async Task<Response> SetPhotoAsync(int multaId, Stream stream)
-        {
-            try
-            {
-                var array = ReadFully(stream);
-
-                var photoRequest = new FileRequest
-                {
-                    Id = multaId,
-                    File = array,
-                    Name= multaId.ToString(),
-                };
-
-                var request = JsonConvert.SerializeObject(photoRequest);
-                var body = new StringContent(request, Encoding.UTF8, "application/json");
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(" http://QuitoParkApp.somee.com");
-                var url = "/api/Multas/SetFoto";
-                var response = await client.PostAsync(url, body);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return new Response
-                    {
-                        IsSuccess = false,
-                        Message = response.StatusCode.ToString(),
-                    };
-                }
-
-                return new Response
-                {
-                    IsSuccess = true,
-                    Message = "Foto asignada Ok",
-                };
-            }
-            catch (Exception ex)
-            {
-                return new Response
-                {
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-            }
-
-        }
-
         public static byte[] ReadFully(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
@@ -257,8 +227,22 @@ namespace OAuthXamarin.Services
             }
         }
 
-
-
-
+        public async Task<List<ComplainRequest>>GetComplain()
+        {
+            try
+            {
+                var client = new System.Net.Http.HttpClient();
+                var response = await client.GetAsync(Constants.ServiceUrl + Constants.Denuncia+ "GetApproved" );
+                string ComplainJson = await response.Content.ReadAsStringAsync();
+                var ComplainResponse = JsonConvert.DeserializeObject(ComplainJson);
+                var complainList = JsonConvert.DeserializeObject<List<ComplainRequest>>(ComplainResponse.ToString());
+                return complainList;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
+        }
     }
 }

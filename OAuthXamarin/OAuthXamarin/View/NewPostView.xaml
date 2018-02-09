@@ -38,13 +38,14 @@
                          Title="Seleccione la subcategoria"
                          DisplayMemberPath="Name"
                          SelectedValuePath="IdSubcategory"
+                        SelectedItem="{Binding SubCatSelectedItem, Mode=TwoWay}"
                          ItemsSource="{Binding Subcategory}"                        
                         />
 
                 </StackLayout>
-                <Entry Text="" Placeholder="Título" />
-                
-                <Entry Text="" Placeholder="Descripción" />
+                <Entry Text="{Binding denuncia.Title }" Placeholder="Título" />
+
+                <Entry Text="{Binding denuncia.Description}" Placeholder="Descripción" />
 
                 <Button x:Name="SaveBtn" Text="Denunciar" Command="{Binding PostCommand}"/>
                 

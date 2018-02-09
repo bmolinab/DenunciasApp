@@ -27,6 +27,8 @@ namespace OAuthXamarin.Helpers
         private const string IsLoginKey = "islogin_key";
         private static readonly bool isLoginDefault = false;
 
+        private const string UserIdKey = "userid_key";
+        private static readonly int useridDefault = 0;
 
         
 
@@ -50,6 +52,11 @@ namespace OAuthXamarin.Helpers
             set { AppSettings.AddOrUpdateValue(IsLoginKey, value); }
         }
 
+        public static int userID
+        {
+            get { return AppSettings.GetValueOrDefault(UserIdKey, useridDefault); }
+            set { AppSettings.AddOrUpdateValue(UserIdKey, value); }
+        }
        
 
     }

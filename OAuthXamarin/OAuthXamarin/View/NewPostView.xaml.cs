@@ -1,5 +1,6 @@
 ﻿using OAuthXamarin.Helpers;
 using OAuthXamarin.ViewModel;
+using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,15 +17,13 @@ namespace OAuthXamarin.View
 	public partial class NewPostView : ContentPage
 	{
         NewPostViewModel viewModel;
-
-        public NewPostView(ImageSource IS)
+        public NewPostView(ImageSource IS, MediaFile file)
         {
-            viewModel = new NewPostViewModel(IS);
+            viewModel = new NewPostViewModel(IS,file);
             viewModel.initData();
             InitializeComponent();
             viewModel.Navigation = this.Navigation;
             this.BindingContext = viewModel;
-
         }
     }
 }

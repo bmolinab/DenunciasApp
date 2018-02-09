@@ -15,8 +15,7 @@ namespace OAuthXamarin.View
             InitializeComponent();
 
             viewModel = new ProfileInfoViewModel(App.Instance.userC);
-            
-            
+            viewModel.Navigation = this.Navigation;
             this.BindingContext = viewModel;
         }
     }

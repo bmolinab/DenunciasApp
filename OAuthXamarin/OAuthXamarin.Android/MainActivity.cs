@@ -6,7 +6,7 @@ using OAuthXamarin;
 using ImageCircle.Forms.Plugin.Droid;
 using Android.Views;
 using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
+using Plugin.Geolocator;
 using OAuthXamarin;
 using FFImageLoading.Forms.Droid;
 using Android.Util;
@@ -35,6 +35,7 @@ namespace OAuthXamarin.Droid
         {
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
         protected void InitDeviceValues()
         {
             var metrics = Resources.DisplayMetrics;

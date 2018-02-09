@@ -9,6 +9,9 @@ using Xamarin.Forms;
 using OAuthXamarin.Helpers;
 using System.Diagnostics;
 using OAuthXamarin.View;
+using System.Collections.Generic;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 
 namespace OAuthXamarin.ViewModel
 {
@@ -16,17 +19,17 @@ namespace OAuthXamarin.ViewModel
     {
         private UserC userC;
         public INavigation Navigation;
-        ApiService apiService;        
+        ApiService apiService;
         DialogService dialogService;
         public Command addPhotoCommand { get; set; }
+        private List<ComplainRequest> _listdenuncia { get; set; }
+        Position Location;
+
 
         //public Command TakePhotoCommand { get; set; }
         //public Command PickPhotoCommand { get; set; }
         private MediaFile file;
-
         private ImageSource imageSource;
-
-
         public UserC User
         {
             get { return userC; }
@@ -36,40 +39,57 @@ namespace OAuthXamarin.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        public ProfileInfoViewModel(UserC user)
+        public List<ComplainRequest> ListDenuncia
         {
+            get { return _listdenuncia; }
+            set
+            {
+                _listdenuncia = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ListDenuncia"));
+            }
+        }
+
+        public  ProfileInfoViewModel(UserC user)
+        {
+            //TakePhotoCommand = new Command(async () => await ExecuteTakePhotoCommand());
+            //PickPhotoCommand = new Command(async () => await ExecutePickPhotoCommand());           
+            initProfile(user);
+            addPhotoCommand = new Command(async () => await ExecuteAddPhotoCommand());
+            Location = new Position();
+            Location.Latitude = -1;
+            Location.Longitude = -1;
+        }
+
+        async Task initProfile(UserC user)
+        {
+
             apiService = new ApiService();
             dialogService = new DialogService();
 
-            if (user.FacebookId != null||user.TwitterId !=null)
+            // ListDenuncia = new List<Complain>();
+
+            ListDenuncia = await apiService.GetComplain();
+            Debug.WriteLine("" + ListDenuncia.Count);
+
+            if (user.FacebookId != null || user.TwitterId != null)
             {
-                apiService.Register(user);
+                var x = await apiService.Register(user);
+                var usuario = (UserC)x.Result;
+                this.userC = usuario;
+                Debug.WriteLine(userC.IdUser);
             }
-
-            this.userC = user;
-
-            //TakePhotoCommand = new Command(async () => await ExecuteTakePhotoCommand());
-
-            //PickPhotoCommand = new Command(async () => await ExecutePickPhotoCommand());
-            
-
-            addPhotoCommand = new Command(async () => await ExecuteAddPhotoCommand());
+            Settings.userID = userC.IdUser;
+            Debug.WriteLine(Settings.userID);
 
         }
 
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-
-
         async Task ExecuteAddPhotoCommand()
         {
             string mensaje = "Crea una nueva publicación";
@@ -99,7 +119,6 @@ namespace OAuthXamarin.ViewModel
 
             Debug.WriteLine("hola");
         }
-
         async Task ExecuteTakePhotoCommand()
         {
             await Plugin.Media.CrossMedia.Current.Initialize();
@@ -128,7 +147,7 @@ namespace OAuthXamarin.ViewModel
                 });
                 // App.Current.MainPage =new  NewPostView(imageSource);
                
-               await App._NavPage.Navigation.PushAsync(new NewPostView(imageSource));
+               await App._NavPage.Navigation.PushAsync(new NewPostView(imageSource, file));
 
                 // await App.Navigator.PushAsync(new NewPostView("1"));
 
@@ -158,7 +177,12 @@ namespace OAuthXamarin.ViewModel
                 file.Dispose();
                 return stream;
             });
+
+            await App._NavPage.Navigation.PushAsync(new NewPostView(image, file));
+
         }
+
+
 
     }
 }

@@ -8,8 +8,8 @@ namespace OAuthXamarin.Model
 {
     public class Subcategory
     {
-        public string IdSubcategory { get; set; }
-        public string IdCategory { get; set; }
+        public int IdSubcategory { get; set; }
+        public int IdCategory { get; set; }
         public string Name { get; set; }
     }
 }

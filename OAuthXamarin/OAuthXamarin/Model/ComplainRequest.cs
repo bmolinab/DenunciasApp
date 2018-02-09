@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OAuthXamarin.Model
 {
-    public class Complain
+    public class ComplainRequest
     {
         public int IdComplain { get; set; }
         public int IdUser { get; set; }
@@ -14,8 +14,9 @@ namespace OAuthXamarin.Model
         public string Title { get; set; }
         public string Description { get; set; }
         public string Photo { get; set; }
-        public decimal? Latitude { get; set; }
-        public decimal? Longitude { get; set; }
-        public bool? Approved { get; set; }
+        public string UserName { get; set; }
+        public string UserPhoto { get; set; }
+        public int LikesComplain { get; set; }
+        public List<CommentRequest> listComement { get; set; }
     }
 }

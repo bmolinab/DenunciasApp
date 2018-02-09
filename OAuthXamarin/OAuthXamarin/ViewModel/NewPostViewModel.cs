@@ -1,10 +1,13 @@
-﻿using OAuthXamarin.Model;
+﻿using OAuthXamarin.Helpers;
+using OAuthXamarin.Model;
 using OAuthXamarin.Services;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +20,9 @@ namespace OAuthXamarin.ViewModel
         public Command PostCommand { get; set; }
         ApiService apiService;
         public INavigation Navigation;
+        public Complain denuncia { get; set; }
+        public int idUser=0;
+        DialogService dialogService;
 
         private MediaFile file;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -56,8 +62,6 @@ namespace OAuthXamarin.ViewModel
 
         }
 
-
-
         private ImageSource imageSource;
         public ImageSource ImageSource
         {
@@ -74,13 +78,15 @@ namespace OAuthXamarin.ViewModel
                 return imageSource;
             }
         }
-        public NewPostViewModel(ImageSource IS)
+        public NewPostViewModel(ImageSource IS, MediaFile file)
         {
+            dialogService = new DialogService();
             apiService = new ApiService();
-            PostCommand = new Command(async () => await ExecutePostCommand());
-          
+            denuncia = new Complain();
+            idUser = App.Instance.userC.IdUser;
+            PostCommand = new Command(async () => await ExecutePostCommand(Navigation));          
             ImageSource = IS;
-
+            this.file = file;
         }
 
         Category catseleccionada;
@@ -94,6 +100,7 @@ namespace OAuthXamarin.ViewModel
             {
                 // marcaseleccionada = ;
                 LoadSubCategory(value);
+                
                 catseleccionada = value;
             }
         }
@@ -103,25 +110,59 @@ namespace OAuthXamarin.ViewModel
             subcategory = new List<Subcategory>();
             Subcategory = await apiService.GetSubCategoryByCategory(_category);
         }
+        Subcategory Subcatseleccionada;
+        public Subcategory SubCatSelectedItem
+        {
+            get
+            {
+                return Subcatseleccionada;
+            }
+            set
+            {
+                // marcaseleccionada = ;
 
-
+                Subcatseleccionada = value;
+            }
+        }
         public async Task initData()
         {
             apiService = new ApiService();
             category = new List<Category>();
             Category = await apiService.GetCategory();            
         }
-
-        async Task ExecutePostCommand()
+        public static byte[] ReadFully(Stream input)
         {
-            var denuncia = new Complain
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
             {
-                IdUser = App.Instance.userC.IdUser,
-                Title = "test",
-                Photo= "https://www.24morelos.com/wp-content/uploads/2017/07/bache.png",
-                Description="Test descripcion",           
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+        async Task ExecutePostCommand(INavigation navigation)
+        {
+           
+            Debug.WriteLine(denuncia.Title);
+            denuncia.IdUser = idUser ;
+            denuncia.IdSubcategory = Subcatseleccionada.IdSubcategory;
+            var array = ReadFully(file.GetStream());
+          DataFile archivo=  new DataFile 
+            {
+                Name = denuncia.Title+denuncia.IdUser+".jpg",
+                Extension = ".jpg",
+                FileData = array
             };
-            await apiService.PostComplain(denuncia);
+            var denunciaResponse = await apiService.PostComplain(denuncia, archivo );
+            if (denunciaResponse.IsSuccess)
+            {
+                await dialogService.ShowMessage(Constants.TittelApp, "La denuncia se realizó con éxito");
+                await navigation.PushAsync(new View.ProfileInfoView());
+                
+            }
         }
 
 

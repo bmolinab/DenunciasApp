@@ -79,14 +79,14 @@ namespace OAuthXamarin.ViewModel
                 var locator = CrossGeolocator.Current;
                 locator.DesiredAccuracy = 50;
                 var Location = await locator.GetPositionAsync();
-              //  var possibleAddresses = await locator(Location);
-                //foreach (var a in possibleAddresses)
-                //{
-                //    if (a.Locality != null || a.Locality != " ")
-                //    {
-                //        return a.Locality.ToString();
-                //    }
-                //}
+                var possibleAddresses = await locator.GetAddressesForPositionAsync(Location);
+                foreach (var a in possibleAddresses)
+                {
+                    if (a.Locality != null || a.Locality != " ")
+                    {
+                        return a.Locality.ToString();
+                    }
+                }
                 return "No se encontro ciudad";
             }
             return "No tiene permiso ";

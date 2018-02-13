@@ -75,6 +75,7 @@ namespace OAuthXamarin.ViewModel
             {
                 var x = await apiService.Register(user);
                 var usuario = (UserC)x.Result;
+                App.Instance.userC = usuario;
                 this.userC = usuario;
                 Debug.WriteLine(userC.IdUser);
             }

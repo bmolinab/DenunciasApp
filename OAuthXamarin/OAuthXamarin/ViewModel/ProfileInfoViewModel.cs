@@ -23,11 +23,7 @@ namespace OAuthXamarin.ViewModel
         DialogService dialogService;
         public Command addPhotoCommand { get; set; }
         public Command viewMapCommand { get; set; }
-
         private List<ComplainRequest> _listdenuncia { get; set; }
-
-        //public Command TakePhotoCommand { get; set; }
-        //public Command PickPhotoCommand { get; set; }
         private MediaFile file;
         private ImageSource imageSource;
         public UserC User
@@ -61,15 +57,10 @@ namespace OAuthXamarin.ViewModel
 
         async Task initProfile(UserC user)
         {
-
             apiService = new ApiService();
             dialogService = new DialogService();
-
-            // ListDenuncia = new List<Complain>();
-
             ListDenuncia = await apiService.GetComplain();
             Debug.WriteLine("" + ListDenuncia.Count);
-
             if (user.FacebookId != null || user.TwitterId != null)
             {
                 var x = await apiService.Register(user);
@@ -80,7 +71,6 @@ namespace OAuthXamarin.ViewModel
             }
             Settings.userID = userC.IdUser;
             Debug.WriteLine(Settings.userID);
-
         }
 
 
@@ -133,6 +123,10 @@ namespace OAuthXamarin.ViewModel
                 Directory = "Photos",
                 Name = "NuevaMulta.jpg",
                 PhotoSize = PhotoSize.Small,
+                AllowCropping=true,
+                
+               
+                
                 //CustomPhotoSize=100,
                 //CompressionQuality=80,
             });
@@ -184,11 +178,8 @@ namespace OAuthXamarin.ViewModel
 
 
         async Task ExecuteMapCommand()
-        {
-            
-
+        {            
             await App._NavPage.Navigation.PushAsync(new MapView(ListDenuncia));
-
         }
 
 

@@ -39,6 +39,8 @@ namespace OAuthXamarin.ViewModel
 
         public MapViewModel(List<ComplainRequest> _ListDenuncia)
         {
+            _listdenuncia = new List<ComplainRequest>();
+            ListDenuncia.Clear();
             foreach (var denuncia in _ListDenuncia)
             {
                 ListDenuncia.Add(denuncia);

@@ -1,6 +1,8 @@
 ﻿using OAuthXamarin.Helpers;
 using OAuthXamarin.Model;
 using OAuthXamarin.Services;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -15,19 +17,21 @@ using Xamarin.Forms;
 
 namespace OAuthXamarin.ViewModel
 {
-    public class NewPostViewModel: INotifyPropertyChanged
+    public  class NewPostViewModel: INotifyPropertyChanged
     {
-        public Command PostCommand { get; set; }
         ApiService apiService;
         public INavigation Navigation;
-        public Complain denuncia { get; set; }
         public int idUser=0;
         DialogService dialogService;
-
         private MediaFile file;
+
+        #region Porperties
+        public Complain denuncia { get; set; }
+        public Command PostCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public List<Category> category;
         public List<Category> Category
+        
         {
             set
             {
@@ -43,7 +47,6 @@ namespace OAuthXamarin.ViewModel
             }
 
         }
-
         public List<Subcategory> subcategory;
         public List<Subcategory> Subcategory
         {
@@ -61,7 +64,6 @@ namespace OAuthXamarin.ViewModel
             }
 
         }
-
         private ImageSource imageSource;
         public ImageSource ImageSource
         {
@@ -78,6 +80,7 @@ namespace OAuthXamarin.ViewModel
                 return imageSource;
             }
         }
+        #endregion
         public NewPostViewModel(ImageSource IS, MediaFile file)
         {
             dialogService = new DialogService();
@@ -87,7 +90,12 @@ namespace OAuthXamarin.ViewModel
             PostCommand = new Command(async () => await ExecutePostCommand(Navigation));          
             ImageSource = IS;
             this.file = file;
+
+
+
+
         }
+
 
         Category catseleccionada;
         public Category CatSelectedItem
@@ -124,11 +132,39 @@ namespace OAuthXamarin.ViewModel
                 Subcatseleccionada = value;
             }
         }
+
+
+
+   
+
         public async Task initData()
         {
             apiService = new ApiService();
             category = new List<Category>();
-            Category = await apiService.GetCategory();            
+            Category = await apiService.GetCategory();
+
+            if (CrossGeolocator.Current.IsGeolocationEnabled)
+            {
+                try
+                {
+                    var locator = CrossGeolocator.Current;
+                    locator.DesiredAccuracy = 50;
+                  
+                   
+                    var position = await locator.GetPositionAsync();
+
+                    denuncia.Longitude =position.Longitude;
+
+                    denuncia.Latitude =position.Latitude;
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error : {0}", e);
+                }
+            }
+
+
+
         }
         public static byte[] ReadFully(Stream input)
         {

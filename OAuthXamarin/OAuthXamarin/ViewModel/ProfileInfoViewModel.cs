@@ -22,9 +22,9 @@ namespace OAuthXamarin.ViewModel
         ApiService apiService;
         DialogService dialogService;
         public Command addPhotoCommand { get; set; }
-        private List<ComplainRequest> _listdenuncia { get; set; }
-        Position Location;
+        public Command viewMapCommand { get; set; }
 
+        private List<ComplainRequest> _listdenuncia { get; set; }
 
         //public Command TakePhotoCommand { get; set; }
         //public Command PickPhotoCommand { get; set; }
@@ -55,9 +55,8 @@ namespace OAuthXamarin.ViewModel
             //PickPhotoCommand = new Command(async () => await ExecutePickPhotoCommand());           
             initProfile(user);
             addPhotoCommand = new Command(async () => await ExecuteAddPhotoCommand());
-            Location = new Position();
-            Location.Latitude = -1;
-            Location.Longitude = -1;
+            viewMapCommand = new Command(async () => await ExecuteMapCommand());
+
         }
 
         async Task initProfile(UserC user)
@@ -180,6 +179,15 @@ namespace OAuthXamarin.ViewModel
             });
 
             await App._NavPage.Navigation.PushAsync(new NewPostView(image, file));
+
+        }
+
+
+        async Task ExecuteMapCommand()
+        {
+            
+
+            await App._NavPage.Navigation.PushAsync(new MapView(ListDenuncia));
 
         }
 

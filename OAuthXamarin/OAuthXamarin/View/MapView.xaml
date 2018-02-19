@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tkmap="clr-namespace:TK.CustomMap;assembly=TK.CustomMap"
+             x:Class="OAuthXamarin.View.MapView">
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+        <tkmap:TKCustomMap 
+                x:Name="Mapa"
+              VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                IsShowingUser="True"   
+                >
+        </tkmap:TKCustomMap>
+    </Grid>
+</ContentPage>

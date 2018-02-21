@@ -10,6 +10,7 @@ using Plugin.Geolocator;
 using OAuthXamarin;
 using FFImageLoading.Forms.Droid;
 using Android.Util;
+using Xamarin;
 
 namespace OAuthXamarin.Droid
 
@@ -24,9 +25,14 @@ namespace OAuthXamarin.Droid
             CachedImageRenderer.Init(true);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            FormsMaps.Init(this, bundle);
+
+           
+
             InitDeviceValues();
             //LoadApplication(new App());
             ImageCircleRenderer.Init();
+
 
             SetPage(App.Instance.GetMainPage());
 

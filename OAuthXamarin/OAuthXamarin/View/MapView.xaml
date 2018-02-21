@@ -7,10 +7,14 @@
 
         <tkmap:TKCustomMap 
                 x:Name="Mapa"
-              VerticalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                IsShowingUser="True"   
-                >
+
+                HasZoomEnabled="True"                
+                IsShowingUser="True"
+            
+            >
+            
         </tkmap:TKCustomMap>
     </Grid>
 </ContentPage>

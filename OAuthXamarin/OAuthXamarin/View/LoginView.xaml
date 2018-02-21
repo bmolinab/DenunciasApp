@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:OAuthXamarin"
              x:Class="OAuthXamarin.View.LoginView"
-             BackgroundColor="{StaticResource MainColor}">
+             BackgroundColor="{StaticResource MainColor}"
+             
+             >
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="primary">#ff3a33</Color>

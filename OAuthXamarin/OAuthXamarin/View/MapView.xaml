@@ -9,7 +9,8 @@
                 x:Name="Mapa"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-
+                CustomPins="{Binding Locations}"    
+                
                 HasZoomEnabled="True"                
                 IsShowingUser="True"
             

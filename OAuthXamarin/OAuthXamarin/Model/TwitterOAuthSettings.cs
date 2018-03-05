@@ -8,7 +8,6 @@
         public string AuthorizeUrl { get; set; }
         public string AccessUrl { get; set; }
         public string CallbackUrl { get; set; }
-
         public TwitterOAuthSettings(string key, string secret, string requestTokenUrl, string authorizeUrl, string accessUrl, string callbackUrl)
         {
             Key = key;

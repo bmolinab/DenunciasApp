@@ -15,21 +15,16 @@ namespace OAuthXamarin.Services
 {
     public class ApiService
     {
-
         public async Task<Response> Login(UserC usuario)
         {
             try
-            {
-               
-
+            {              
                 var request = JsonConvert.SerializeObject(usuario);
                 var content = new StringContent(request, Encoding.UTF8, "application/json");
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(Constants.ServiceUrl);
                 var url =Constants.Usuario+"Login";
-
                 var response = await client.PostAsync(url, content);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     return new Response
@@ -40,11 +35,7 @@ namespace OAuthXamarin.Services
                 }
                 var result = await response.Content.ReadAsStringAsync();
                 var user = JsonConvert.DeserializeObject<Response>(result);
-
                 return  user;
-
-
-
             }
             catch (Exception ex)
             {
@@ -74,16 +65,15 @@ namespace OAuthXamarin.Services
                         IsSuccess = false,
                         Message = "Usuario o Contraseña incorrecto",
                     };
-
                 }
                 var result = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<UserC>(result);
-                
-                
-                return new Response {
+                var user = JsonConvert.DeserializeObject<UserC>(result);                                
+                return new Response
+                {
                     IsSuccess=true,
                     Message="UserData",
-                    Result = user };
+                    Result = user
+                };
             }
             catch (Exception ex)
             {
@@ -94,7 +84,6 @@ namespace OAuthXamarin.Services
                 };
                 throw;
             }
-
         }
         public async Task<Response> PostComplain(Complain denuncia, DataFile photo)
         {
@@ -117,12 +106,10 @@ namespace OAuthXamarin.Services
                 var resultphoto = await responsephoto.Content.ReadAsStringAsync();
                 var photodata = JsonConvert.DeserializeObject<Response>(resultphoto);
                 denuncia.Photo = Constants.ServiceUrl + "/" + photodata.Message;
-
                 var request = JsonConvert.SerializeObject(denuncia);
                 var content = new StringContent(request, Encoding.UTF8, "application/json");
                 var url = Constants.Denuncia + "PostComplain";
                 var response = await client.PostAsync(url, content);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     return new Response
@@ -131,14 +118,12 @@ namespace OAuthXamarin.Services
                         Message = "Denuncia inCorrecta",
                     };
                 }
-
                 var result = await response.Content.ReadAsStringAsync();
                 var DenunciaResponse = JsonConvert.DeserializeObject<Response>(result);
                 if (DenunciaResponse.IsSuccess)
                 {
                     Debug.WriteLine("funciona");
-                }
-                
+                }               
                 return DenunciaResponse;
             }
             catch (Exception ex)
@@ -150,26 +135,7 @@ namespace OAuthXamarin.Services
                 };
                 throw;
             }
-
-        }
-        //public async Task <Response> GetCategory()
-        //{
-        //    var client = new HttpClient();
-        //    client.BaseAddress = new Uri(Constants.ServiceUrl);
-        //    var url = Constants.Category + "GetCategorias";
-        //    var response = await client.GetAsync(url);
-        //    if (!response.IsSuccessStatusCode)
-        //    {
-        //        return new Response
-        //        {
-        //            IsSuccess = false,
-        //            Message = "error al obtener las categorias",
-        //        };
-        //    }
-        //    var result = await response.Content.ReadAsStringAsync();
-        //    var categorias = JsonConvert.DeserializeObject<Response>(result);
-        //    return categorias;
-        //}
+        }       
         public async Task<List<Category>> GetCategory()
         {
             try
@@ -180,7 +146,6 @@ namespace OAuthXamarin.Services
                 var catResponse = JsonConvert.DeserializeObject<Response>(CatJson);
                 var  catList = JsonConvert.DeserializeObject<List<Category>>(catResponse.Result.ToString());
                 return catList;
-
             }
             catch (Exception)
             {
@@ -213,6 +178,91 @@ namespace OAuthXamarin.Services
             }
 
         }
+        public async Task<List<CommentRequest>> GetCommentsbyComplaint(ComplainRequest denuncia)
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(denuncia);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.ServiceUrl);
+                var url = Constants.Comments + "byComplaint";
+                var response = await client.PostAsync(url, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+                var result = await response.Content.ReadAsStringAsync();
+                if (result != null)
+                {
+                    var Comentarios = JsonConvert.DeserializeObject<List<CommentRequest>>(result);
+                    return Comentarios;
+
+                }
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+                throw;
+            }
+
+
+        }
+
+        public async Task<ProfileData> GetDataProfile(int id)
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(id);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.ServiceUrl);
+                var url = Constants.Usuario + "GetDataProfile";
+                var response = await client.PostAsync(url, content);
+                var result = await response.Content.ReadAsStringAsync();
+                var Datos = JsonConvert.DeserializeObject<ProfileData>(result);
+                return Datos;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<Response> PostComment(CommentRequest comentario)
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(comentario);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.ServiceUrl);
+                var url = Constants.Comments + "Post";
+                var response = await client.PostAsync(url, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+                var result = await response.Content.ReadAsStringAsync();
+                if (result != null)
+                {
+                    var Comentarios = JsonConvert.DeserializeObject<Response>(result);
+                    return Comentarios;
+                }
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+                throw;
+            }
+        }
+
+
         public static byte[] ReadFully(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
@@ -226,7 +276,6 @@ namespace OAuthXamarin.Services
                 return ms.ToArray();
             }
         }
-
         public async Task<List<ComplainRequest>>GetComplain()
         {
             try
@@ -244,5 +293,49 @@ namespace OAuthXamarin.Services
             }
             
         }
+
+        public async Task<List<ComplainRequest>> MyComplain()
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(App.Instance.userC.IdUser);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.ServiceUrl);
+                var url = Constants.Denuncia + "MyComplain";
+                var response = await client.PostAsync(url, content);
+                var result = await response.Content.ReadAsStringAsync();
+                var Datos = JsonConvert.DeserializeObject<List<ComplainRequest>>(result);
+                return Datos;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<List<ComplainRequest>> UserComplain(int id)
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(id);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.ServiceUrl);
+                var url = Constants.Denuncia + "UserComplain";
+                var response = await client.PostAsync(url, content);
+                var result = await response.Content.ReadAsStringAsync();
+                var Datos = JsonConvert.DeserializeObject<List<ComplainRequest>>(result);
+                return Datos;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
+
     }
 }

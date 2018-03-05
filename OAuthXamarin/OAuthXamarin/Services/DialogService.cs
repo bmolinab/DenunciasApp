@@ -15,7 +15,6 @@ namespace OAuthXamarin.Services
        public async Task<string> OptionMessage(string mensaje, string op1, string op2)
         {
             var answer = await App.Current.MainPage.DisplayActionSheet(mensaje, "Cancelar", null, op1, op2);
-
             return answer;
         }
     }

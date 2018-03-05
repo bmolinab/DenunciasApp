@@ -1,4 +1,7 @@
-﻿using OAuthXamarin.Model;
+﻿using FFImageLoading.Forms;
+using FFImageLoading.Transformations;
+using FFImageLoading.Work;
+using OAuthXamarin.Model;
 using OAuthXamarin.Services;
 using Plugin.Geolocator;
 using Plugin.Media.Abstractions;
@@ -28,6 +31,7 @@ namespace OAuthXamarin.ViewModel
     private MediaFile file;
     public ObservableCollection<TKCustomMapPin> locations;
         public TKCustomMap mapa { get; set; }
+        
 
         public List<ComplainRequest> ListDenuncia
         {
@@ -46,14 +50,51 @@ namespace OAuthXamarin.ViewModel
 
         public MapViewModel(List<ComplainRequest> _ListDenuncia)
         {
-            mapa = new TKCustomMap();
             //  Locator();
             locations = new ObservableCollection<TKCustomMapPin>();
+            Locations.Clear();
             _listdenuncia = new List<ComplainRequest>();
             ListDenuncia.Clear();
             foreach (var denuncia in _ListDenuncia)
             {
                 ListDenuncia.Add(denuncia);
+
+                var cachedImage = new CachedImage()
+                {
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    DownsampleToViewSize = true,
+                 
+                    Transformations = new System.Collections.Generic.List<ITransformation>() {
+                     new GrayscaleTransformation(),
+                     new CircleTransformation(),
+                         },
+                    Source = denuncia.Photo,
+                    CacheType= FFImageLoading.Cache.CacheType.Disk                    
+                };
+                string imagenPin = "";
+                if(denuncia.IdSubcategory<3)
+                {
+                    imagenPin = "qpt_mov";
+                }
+                else if(denuncia.IdSubcategory<6)
+                    {
+                    imagenPin = "qpt_edu";
+                    }
+                else if(denuncia.IdSubcategory<9)
+                    {
+                    imagenPin = "qpt_inc";
+                    }
+                var pin = new TKCustomMapPin
+                {
+                    Image=imagenPin,
+                    Position = new Position((double)denuncia.Latitude, (double)denuncia.Longitude),
+                    Title = denuncia.Title,
+                    Subtitle= denuncia.Description,
+                    DefaultPinColor=Color.Green,
+                    ShowCallout = true,                     
+                };                
+                Locations.Add(pin); 
             }
         }
 

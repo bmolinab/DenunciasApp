@@ -25,7 +25,8 @@ namespace OAuthXamarin.Helpers
         public const string Usuario = "/api/UserCs/";
         public const string Denuncia = "/api/Complains/";
         public const string Category = "/api/Categories/";
-        public const string SubCategory = "api/Subcategories/";
+        public const string SubCategory = "/api/Subcategories/";
+        public const string Comments = "/api/Comments/";
 
         public const string TittelApp = "QuejasAPP";
         public ImgTemp imgTemp { get; internal set; }

@@ -196,7 +196,7 @@ namespace OAuthXamarin.ViewModel
             if (denunciaResponse.IsSuccess)
             {
                 await dialogService.ShowMessage(Constants.TittelApp, "La denuncia se realizó con éxito");
-                await navigation.PushAsync(new View.ProfileInfoView());
+                await navigation.PushAsync(new View.MainView());
                 
             }
         }

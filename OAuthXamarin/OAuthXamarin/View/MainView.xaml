@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="OAuthXamarin.View.ProfileInfoView"
+             x:Class="OAuthXamarin.View.MainView"
              xmlns:Local="clr-namespace:OAuthXamarin;assembly=OAuthXamarin"
              xmlns:imagen="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
@@ -48,7 +48,18 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
-                    <ListView Grid.Column="0" Grid.Row="0" HasUnevenRows="True" VerticalOptions="FillAndExpand" SeparatorVisibility="None" SelectedItem="CellSelected" CachingStrategy="RecycleElement" ItemsSource="{Binding ListDenuncia}">
+                    <ListView Grid.Column="0" 
+                              Grid.Row="0" 
+                              HasUnevenRows="True" 
+                              VerticalOptions="FillAndExpand" 
+                              SeparatorVisibility="Default" 
+                              x:Name="ListDenuncias"
+                              CachingStrategy="RecycleElement" 
+                              IsPullToRefreshEnabled="True"                              
+                              ItemsSource="{Binding ListDenuncia}"
+                              RefreshCommand="{Binding RefreshDenuncias}"
+                              IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
+                              >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -68,28 +79,34 @@
                                                 <ffimageloading:CachedImage.Transformations>
                                                     <fftransformations:CircleTransformation />
                                                 </ffimageloading:CachedImage.Transformations>
+                                                <ffimageloading:CachedImage.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                    Command="{Binding Path=BindingContext.TapCommand2, Source = {x:Reference ListDenuncias}}" CommandParameter="{Binding}" />
+                                                </ffimageloading:CachedImage.GestureRecognizers>
                                             </ffimageloading:CachedImage>
                                             <Label Text="{Binding UserName}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
                                             <Label Text="Quito" HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
                                             <Image Source="location.png" HorizontalOptions="End" Margin="8,12,12,12"/>
                                         </StackLayout>
-
                                         <StackLayout Grid.Row="1" Grid.Column="0">
                                             <ffimageloading:CachedImage Source="{Binding Photo}" IsOpaque="True" TransparencyEnabled="False" FadeAnimationEnabled="False" TransformPlaceholders="False"/>
                                         </StackLayout>
-
                                         <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="0">
-                                            <ffimageloading:CachedImage x:Name="LikeIcon" Source="unliked" Margin="12">
+                                            <ffimageloading:CachedImage x:Name="LikeIcon" Source="unliked" Margin="12" >
                                             </ffimageloading:CachedImage>
-                                            <Label Text="{Binding Title}" VerticalTextAlignment="Center"/>
+                                            <ffimageloading:CachedImage x:Name="commentIcon" Source="comment" Margin="12" >
+                                                <ffimageloading:CachedImage.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                    Command="{Binding Path=BindingContext.TapCommand, Source = {x:Reference ListDenuncias}}" CommandParameter="{Binding}" />
+                                                </ffimageloading:CachedImage.GestureRecognizers>
+                                            </ffimageloading:CachedImage>
+                                                
+                                            <Label Text="{Binding Title}" VerticalTextAlignment="Center" HorizontalOptions="End"/>
                                         </StackLayout>
                                         <StackLayout Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="0">
                                             <Label Text="{Binding Description}" VerticalTextAlignment="Center"/>
                                         </StackLayout>
-
-
                                     </Grid>
-
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -117,8 +134,8 @@
                     <Image Grid.Row="1" Grid.Column="2" Source="add.png" x:Name="AddImagePageImg" />
                     <Button Grid.RowSpan="3" Grid.Column="2" BackgroundColor="Transparent" Command="{Binding addPhotoCommand}"/>
 
-                    <Image Grid.Row="1" Grid.Column="3" Source="likedpage.png" Opacity="0.4" x:Name="LikedPageImg"/>
-                    <Button Grid.RowSpan="3" Grid.Column="3" BackgroundColor="Transparent" />
+                    <Image Grid.Row="1" Grid.Column="3" Source="ic_action_person.png" Opacity="0.4" x:Name="LikedPageImg"/>
+                    <Button Grid.RowSpan="3" Grid.Column="3" BackgroundColor="Transparent" Command="{Binding MyProfileCommand}" />
                 </Grid>
       
             </StackLayout>

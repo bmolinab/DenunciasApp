@@ -12,10 +12,11 @@ using OAuthXamarin.View;
 using System.Collections.Generic;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
+using System.Windows.Input;
 
 namespace OAuthXamarin.ViewModel
 {
-    public class ProfileInfoViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
         private UserC userC;
         public INavigation Navigation;
@@ -23,6 +24,27 @@ namespace OAuthXamarin.ViewModel
         DialogService dialogService;
         public Command addPhotoCommand { get; set; }
         public Command viewMapCommand { get; set; }
+        public Command RefreshDenuncias { get; set; }
+        public Command MyProfileCommand { get; set; }
+
+        private Command<object> tapCommand;
+
+
+        public Command<object> TapCommand
+        {
+            get { return tapCommand; }
+            set { tapCommand = value; }
+        }
+
+        private Command<object> tapCommand2;
+
+
+        public Command<object> TapCommand2
+        {
+            get { return tapCommand2; }
+            set { tapCommand2 = value; }
+        }
+
         private List<ComplainRequest> _listdenuncia { get; set; }
         private MediaFile file;
         private ImageSource imageSource;
@@ -44,15 +66,34 @@ namespace OAuthXamarin.ViewModel
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ListDenuncia"));
             }
         }
+        public bool isRefreshing;
 
-        public  ProfileInfoViewModel(UserC user)
-        {
-            //TakePhotoCommand = new Command(async () => await ExecuteTakePhotoCommand());
-            //PickPhotoCommand = new Command(async () => await ExecutePickPhotoCommand());           
+        public MainViewModel(UserC user)
+        {               
             initProfile(user);
             addPhotoCommand = new Command(async () => await ExecuteAddPhotoCommand());
             viewMapCommand = new Command(async () => await ExecuteMapCommand());
+            RefreshDenuncias = new Command(async () => await ExecuteUpdateList());
+            MyProfileCommand = new Command(async () => await ExecuteMyProfileCommand());
 
+            tapCommand = new Command<object>(OnTapped);
+            tapCommand2 = new Command<object>(OnTapped2);
+
+            //  CommentCommand = new Command(async () => await commentCommand(Navigation));
+        }
+
+        private async void OnTapped(object obj)
+        {
+            ComplainRequest denuncia = (ComplainRequest) obj;
+            await Navigation.PushAsync(new CommentView(denuncia));
+            Debug.WriteLine("hola");
+        }
+
+        private async void OnTapped2(object obj)
+        {
+            ComplainRequest denuncia = (ComplainRequest)obj;
+            await Navigation.PushAsync(new ProfileView(false, denuncia.IdUser));
+            Debug.WriteLine("hola");
         }
 
         async Task initProfile(UserC user)
@@ -72,10 +113,25 @@ namespace OAuthXamarin.ViewModel
             Settings.userID = userC.IdUser;
             Debug.WriteLine(Settings.userID);
         }
-
-
-
+        async Task ExecuteUpdateList()
+        {
+            ListDenuncia = await apiService.GetComplain();
+            IsRefreshing = false;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool IsRefreshing
+        {
+            set
+            {
+                if (isRefreshing != value)
+                {
+                    isRefreshing = value;
+
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRefreshing"));
+                }
+            }
+            get { return isRefreshing; }
+        }
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -175,14 +231,17 @@ namespace OAuthXamarin.ViewModel
             await App._NavPage.Navigation.PushAsync(new NewPostView(image, file));
 
         }
-
-
         async Task ExecuteMapCommand()
         {            
             await App._NavPage.Navigation.PushAsync(new MapView(ListDenuncia));
         }
-
+        async Task ExecuteMyProfileCommand()
+        {
+            await App._NavPage.Navigation.PushAsync(new ProfileView(true,App.Instance.userC.IdUser));
+           // await Navigation.PushAsync(new ProfileView());
+        }
 
 
     }
+
 }

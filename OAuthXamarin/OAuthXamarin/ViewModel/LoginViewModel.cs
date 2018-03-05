@@ -16,12 +16,9 @@ namespace OAuthXamarin.ViewModel
         public Command FacebookLoginCommand { get; set; }
         public Command TwitterLoginCommand { get; set; }
         public Command RegisterCommand { get; set; }
-        public Command LoginCommand { get; set; }
-        
+        public Command LoginCommand { get; set; }        
         public UserC usuario { get; set; }
-
         public INavigation Navigation;
-
         public LoginViewModel()
         {
             FacebookLoginCommand = new Command(async () => await ExecuteFacebookLoginCommand(Navigation));
@@ -44,7 +41,7 @@ namespace OAuthXamarin.ViewModel
              //   var userc = (UserC)request.Result;
                 App.Instance.userC = userc;
                 
-                await navigation.PushAsync(new View.ProfileInfoView());               
+                await navigation.PushAsync(new View.MainView());               
             }
             else
             {
@@ -61,7 +58,6 @@ namespace OAuthXamarin.ViewModel
         {          
             await navigation.PushModalAsync(new View.LoginFacebookView("Facebook"));
         }
-
         async Task ExecuteTwitterLoginCommand(INavigation navigation)
         {
             await navigation.PushModalAsync(new View.LoginTwitterView("Twitter"));

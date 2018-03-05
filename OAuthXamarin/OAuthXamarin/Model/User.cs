@@ -8,10 +8,6 @@
         public string Email { get; set; }
         public string ProfilePictureURL { get; set; }
         public string Provider { get; set; }
-
-       
-
-
         public User(string id, string name, string socialName, string email, string profilePictureUrl, string provider)
         {
             ID = id;

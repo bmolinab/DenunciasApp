@@ -77,8 +77,10 @@ namespace OAuthXamarin
                 return _Instance;
             }
         }
+    
         public Page GetMainPage()
         {
+            InitializeComponent();
             _NavPage = new NavigationPage(new View.LoginView()) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
             return _NavPage;
         }
@@ -90,7 +92,7 @@ namespace OAuthXamarin
         {
             Settings.IsLoggedIn = true;
 
-            await _NavPage.Navigation.PushAsync(new View.ProfileInfoView());
+            await _NavPage.Navigation.PushAsync(new View.MainView());
             //MainPage = new View.ProfileInfoView();
         }
         protected override void OnStart() { // Handle when your app starts

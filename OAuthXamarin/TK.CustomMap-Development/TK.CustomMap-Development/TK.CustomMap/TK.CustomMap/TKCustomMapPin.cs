@@ -33,6 +33,7 @@ namespace TK.CustomMap
         public const string AnchorPropertyName = "Anchor";
         public const string RotationPropertyName = "Rotation";
         public const string IsCalloutClickablePropertyName = "IsCalloutClickable";
+        
 
         /// <summary>
         /// Gets/Sets visibility of a pin
@@ -92,6 +93,8 @@ namespace TK.CustomMap
             get { return image; }
             set { this.SetField(ref image, value); }
         }
+
+
         /// <summary>
         /// Gets/Sets if the pin is draggable
         /// </summary>

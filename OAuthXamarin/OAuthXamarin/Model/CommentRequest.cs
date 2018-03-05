@@ -12,5 +12,7 @@ namespace OAuthXamarin.Model
         public string Comment1 { get; set; }
         public int IdComplain { get; set; }
         public int IdUser { get; set; }
+        public string UserName { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

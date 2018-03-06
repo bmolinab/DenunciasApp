@@ -9,12 +9,12 @@
                 x:Name="Mapa"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                CustomPins="{Binding Locations}"    
-                
+                Pins="{Binding Locations}"              
+                MapRegion="{Binding MapRegion}"
+                IsClusteringEnabled="True"                
                 HasZoomEnabled="True"                
                 IsShowingUser="True"
-            
-            >
+        >
             
         </tkmap:TKCustomMap>
     </Grid>

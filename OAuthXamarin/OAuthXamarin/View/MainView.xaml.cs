@@ -26,6 +26,7 @@ namespace OAuthXamarin.View
                 ((ListView)sender).SelectedItem = null; 
             };
 
+            
         }          
 }
 }

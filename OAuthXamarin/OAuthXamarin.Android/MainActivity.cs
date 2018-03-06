@@ -12,7 +12,7 @@ using FFImageLoading.Forms.Droid;
 using Android.Util;
 using Xamarin;
 using Lottie.Forms.Droid;
-
+using TK.CustomMap.Droid;
 
 namespace OAuthXamarin.Droid
 
@@ -27,6 +27,7 @@ namespace OAuthXamarin.Droid
             CachedImageRenderer.Init(true);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            TKGoogleMaps.Init(this, bundle);
             FormsMaps.Init(this, bundle);
 
            

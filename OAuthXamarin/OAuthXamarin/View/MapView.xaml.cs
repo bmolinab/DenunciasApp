@@ -25,20 +25,26 @@ namespace OAuthXamarin.View
             viewModel = new MapViewModel(_ListDenuncia);
             viewModel.Navigation = this.Navigation;
             this.BindingContext = viewModel;
-            Locator();
+          //  Locator();
+
+           
 
         }
 
-        async void Locator()
-        {
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 25;
-            var location = await locator.GetPositionAsync();
-            var position = new Position(location.Latitude, location.Longitude);
-            await Task.Delay(3000);
-            Mapa.MoveToRegion(MapSpan.FromCenterAndRadius((position), Distance.FromMiles(.3)));
-              
-        }
+        //async void Locator()
+        //{
+        //    var locator = CrossGeolocator.Current;
+        //    locator.DesiredAccuracy = 25;
+        //    var location = await locator.GetPositionAsync();
+        //    var position = new Position(location.Latitude, location.Longitude);
+        //    await Task.Delay(3000);
+        //    MapSpan _mapRegion = MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(2));
 
+        //    MapRegion = MapSpan.FromCenterAndRadius(MapRegion.Center, Distance.FromKilometers(100));
+
+        //    //  Mapa.MoveToMapRegion((MapSpan.FromCenterAndRadius((position), Distance.FromMiles(.3))), true);
+        //    //Mapa.MoveToRegion(MapSpan.FromCenterAndRadius((position), Distance.FromMiles(.3)));
+
+        //}
     }
 }

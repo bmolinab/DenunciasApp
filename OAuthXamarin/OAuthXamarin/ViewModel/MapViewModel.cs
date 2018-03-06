@@ -29,7 +29,10 @@ namespace OAuthXamarin.ViewModel
     public event PropertyChangedEventHandler PropertyChanged;
     private List<ComplainRequest> _listdenuncia { get; set; }    
     private MediaFile file;
-    public ObservableCollection<TKCustomMapPin> locations;
+        TK.CustomMap.MapSpan _mapRegion = TK.CustomMap.MapSpan.FromCenterAndRadius(new TK.CustomMap.Position(0, 0), TK.CustomMap.Distance.FromKilometers(2));
+
+
+        public ObservableCollection<TKCustomMapPin> locations;
         public TKCustomMap mapa { get; set; }
         
 
@@ -43,6 +46,20 @@ namespace OAuthXamarin.ViewModel
             }
         }
 
+        public TK.CustomMap.MapSpan MapRegion
+        {
+            get { return _mapRegion; }
+            set
+            {
+                if (_mapRegion != value)
+                {
+                    _mapRegion = value;
+                    OnPropertyChanged("MapRegion");
+                }
+            }
+        }
+
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -50,7 +67,7 @@ namespace OAuthXamarin.ViewModel
 
         public MapViewModel(List<ComplainRequest> _ListDenuncia)
         {
-            //  Locator();
+              Locator();
             locations = new ObservableCollection<TKCustomMapPin>();
             Locations.Clear();
             _listdenuncia = new List<ComplainRequest>();
@@ -73,30 +90,40 @@ namespace OAuthXamarin.ViewModel
                     CacheType= FFImageLoading.Cache.CacheType.Disk                    
                 };
                 string imagenPin = "";
+                Color colorpin = Color.White;
                 if(denuncia.IdSubcategory<3)
                 {
                     imagenPin = "qpt_mov";
+                    colorpin = Color.Blue;
+
                 }
                 else if(denuncia.IdSubcategory<6)
                     {
                     imagenPin = "qpt_edu";
-                    }
+                    colorpin = Color.Red;
+
+                }
                 else if(denuncia.IdSubcategory<9)
                     {
                     imagenPin = "qpt_inc";
-                    }
+                    colorpin = Color.Yellow;
+
+                }
                 var pin = new TKCustomMapPin
                 {
-                    Image=imagenPin,
-                    Position = new Position((double)denuncia.Latitude, (double)denuncia.Longitude),
+                    Position = new TK.CustomMap.Position((double)denuncia.Latitude, (double)denuncia.Longitude),
                     Title = denuncia.Title,
                     Subtitle= denuncia.Description,
-                    DefaultPinColor=Color.Green,
-                    ShowCallout = true,                     
-                };                
+                    DefaultPinColor=colorpin,
+                    ShowCallout = true,  
+                    
+                }; 
+               
                 Locations.Add(pin); 
             }
         }
+
+
 
         public ObservableCollection<TKCustomMapPin> Locations
         {
@@ -109,6 +136,25 @@ namespace OAuthXamarin.ViewModel
             get { return locations; }
         }
 
+        async void Locator()
+        {
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 25;
+            var location = await locator.GetPositionAsync();
+            var position = new TK.CustomMap.Position(location.Latitude, location.Longitude);
+            await Task.Delay(3000);
+            _mapRegion = TK.CustomMap.MapSpan.FromCenterAndRadius(position, TK.CustomMap.Distance.FromKilometers(2));
+            
+            MapRegion = TK.CustomMap.MapSpan.FromCenterAndRadius(_mapRegion.Center, TK.CustomMap.Distance.FromKilometers(.3));
+
+            
+            
+
+
+            //  Mapa.MoveToMapRegion((MapSpan.FromCenterAndRadius((position), Distance.FromMiles(.3))), true);
+            //Mapa.MoveToRegion(MapSpan.FromCenterAndRadius((position), Distance.FromMiles(.3)));
+
+        }
 
     }
 

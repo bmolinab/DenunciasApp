@@ -88,8 +88,8 @@
                                             <Label Text="Quito" HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
                                             <Image Source="location.png" HorizontalOptions="End" Margin="8,12,12,12"/>
                                         </StackLayout>
-                                        <StackLayout Grid.Row="1" Grid.Column="0">
-                                            <ffimageloading:CachedImage Source="{Binding Photo}" IsOpaque="True" TransparencyEnabled="False" FadeAnimationEnabled="False" TransformPlaceholders="False"/>
+                                        <StackLayout Grid.Row="1" Grid.Column="0" >
+                                            <ffimageloading:CachedImage  Source="{Binding Photo}" IsOpaque="True" TransparencyEnabled="False" FadeAnimationEnabled="True" TransformPlaceholders="False"   Aspect="AspectFill" HorizontalOptions="FillAndExpand"  />
                                         </StackLayout>
                                         <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="0">
                                             <ffimageloading:CachedImage x:Name="LikeIcon" Source="unliked" Margin="12" >

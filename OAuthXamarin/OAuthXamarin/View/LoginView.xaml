@@ -5,6 +5,7 @@
              xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              x:Class="OAuthXamarin.View.LoginView"
              BackgroundColor="{StaticResource MainColor}"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
              
              >
     <ContentPage.Resources>
@@ -86,6 +87,8 @@
                         Text="{Binding usuario.Password}">
                 
             </Entry>
+            <controls:CheckBox DefaultText="Recordar" HorizontalOptions="FillAndExpand" Margin="20,0,20,0"></controls:CheckBox>
+            
             <Button Margin="20,0,20,0" 
                          Text="Ingresar"  
                          Style="{StaticResource Buttons}"

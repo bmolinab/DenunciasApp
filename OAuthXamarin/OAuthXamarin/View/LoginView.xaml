@@ -53,6 +53,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
+        <ScrollView>
         <StackLayout  Padding="5" Spacing="5">
             <!--<Label HeightRequest="110"  
                           HorizontalOptions="FillAndExpand" 
@@ -75,20 +76,27 @@
                           FontSize="20" 
                           HorizontalTextAlignment="Center"
                           VerticalTextAlignment="Center"/>-->
+            <Image Source="iconTitle" IsVisible="True" WidthRequest="200" HeightRequest="200" >
+            </Image>
 
             <Entry  Margin="20,40,20,0" 
                          HeightRequest="50" 
                          Placeholder="Email"
                         Text="{Binding usuario.Email}">
             </Entry>
+
             <Entry Margin="20,0,20,0" 
                         HeightRequest="50" IsPassword="true"
                         Placeholder="Password"
                         Text="{Binding usuario.Password}">
-                
+
             </Entry>
-            <controls:CheckBox DefaultText="Recordar" HorizontalOptions="FillAndExpand" Margin="20,0,20,0"></controls:CheckBox>
-            
+            <controls:CheckBox DefaultText="Mantener mi sesión activa" 
+                               HorizontalOptions="FillAndExpand" 
+                               Margin="20,0,20,0"
+                               Checked="{Binding IsCheck}">
+            </controls:CheckBox>
+
             <Button Margin="20,0,20,0" 
                          Text="Ingresar"  
                          Style="{StaticResource Buttons}"
@@ -118,17 +126,11 @@
                         <TapGestureRecognizer Command="{Binding TwitterLoginCommand} "/>
                     </Image.GestureRecognizers>
                 </Image>
-
             </StackLayout>
             <Label Text="Recuperar Contraseña" 
                         HorizontalOptions="Center" 
                         TextColor="{StaticResource AccentColor2}"/>
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
-
-    <!--<StackLayout BackgroundColor="White" Padding="15">
-        
-        <Button Text="Login Facebook" Command="{Binding FacebookLoginCommand}"/>
-        <Button Text="Login Twitter" Command="{Binding TwitterLoginCommand}" />
-    </StackLayout>-->
 </ContentPage>

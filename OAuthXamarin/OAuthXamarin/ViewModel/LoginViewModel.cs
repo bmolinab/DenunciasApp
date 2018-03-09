@@ -4,12 +4,13 @@ using OAuthXamarin.Model;
 using OAuthXamarin.Services;
 using Plugin.Geolocator;
 using Plugin.Permissions.Abstractions;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace OAuthXamarin.ViewModel
 {
-    public class LoginViewModel
+    public class LoginViewModel : INotifyPropertyChanged
     {
         ApiService apiService;
         DialogService dialogService;
@@ -18,7 +19,24 @@ namespace OAuthXamarin.ViewModel
         public Command RegisterCommand { get; set; }
         public Command LoginCommand { get; set; }        
         public UserC usuario { get; set; }
+        private bool isCheck = true;
         public INavigation Navigation;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool IsCheck
+        {
+            set
+            {
+                if (isCheck != value)
+                {
+                    isCheck = value;
+
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsCheck"));
+                }
+            }
+            get { return isCheck; }
+        }
         public LoginViewModel()
         {
             FacebookLoginCommand = new Command(async () => await ExecuteFacebookLoginCommand(Navigation));
@@ -49,7 +67,6 @@ namespace OAuthXamarin.ViewModel
             }
 
         }
-
         async Task ExecuteRegisterCommand(INavigation navigation)
         {
             await navigation.PushModalAsync(new View.RegisterView());

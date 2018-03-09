@@ -36,7 +36,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Column="1" Grid.Row="0" Text="QuejasAPP" FontAttributes="Bold" FontSize="Large" FontFamily="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                    <Image Grid.Column="1" Grid.Row="0"  HorizontalOptions="Center" Source="iconTitle" IsVisible="True" />
                 </Grid>
 
                 <!--cuerpo -->

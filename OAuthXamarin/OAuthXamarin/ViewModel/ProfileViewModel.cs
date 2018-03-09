@@ -20,9 +20,51 @@ namespace OAuthXamarin.ViewModel
         ApiService apiService;
         DialogService dialogService;
         public Command addCommentCommand { get; set; }
+        public Command EditCommand { get; set; }
         public Command RefreshComments { get; set; }
         public CommentRequest comentario { get; set; }
         private List<ComplainRequest> _listdenuncia { get; set; }
+
+        private bool isVisible = true;
+        private bool isEditable = false;
+        private bool isProfile = true;
+
+        public bool IsEditable
+        {
+            set
+            {
+                if (isEditable != value)
+                {
+                    isEditable = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsEditable"));
+                }
+            }
+            get { return isEditable; }
+        }
+        public bool IsProfile
+        {
+            set
+            {
+                if (isProfile != value)
+                {
+                    isProfile = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsProfile"));
+                }
+            }
+            get { return isProfile; }
+        }
+        public bool IsVisible
+        {
+            set
+            {
+                if (isVisible != value)
+                {
+                    isVisible = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsVisible"));
+                }
+            }
+            get { return isVisible; }
+        }
 
         public ComplainRequest denuncia { get; set; }
         private MediaFile file;
@@ -37,11 +79,13 @@ namespace OAuthXamarin.ViewModel
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
+
+
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         public List<ComplainRequest> ListDenuncia
         {
             get { return _listdenuncia; }
@@ -51,11 +95,10 @@ namespace OAuthXamarin.ViewModel
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ListDenuncia"));
             }
         }
-
-
         public ProfileViewModel(bool areyou, int id)
         {
             this.denuncia = denuncia;
+            IsVisible = areyou;
             if (areyou)
             {
                 initComment();
@@ -64,10 +107,17 @@ namespace OAuthXamarin.ViewModel
             {
                 initComment2(id);
             }
-
-            //addCommentCommand = new Command(async () => await ExecuteAddCommentCommand());
+            EditCommand = new Command(async () => await ExecuteEditCommand());
             //RefreshComments = new Command(async () => await ExecuteUpdateList());
         }
+        async Task ExecuteEditCommand()
+        {
+            IsProfile = false;
+            IsEditable = true;
+            IsVisible = false;
+        }
+
+
         async Task initComment()
         {
             apiService = new ApiService();
@@ -77,7 +127,6 @@ namespace OAuthXamarin.ViewModel
             ListDenuncia = await apiService.MyComplain();
             Debug.WriteLine("" + comentario.UserName);
         }
-
         async Task initComment2(int id)
         {
             apiService = new ApiService();

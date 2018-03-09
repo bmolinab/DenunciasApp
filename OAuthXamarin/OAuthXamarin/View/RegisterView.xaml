@@ -17,6 +17,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
+        <ScrollView>
         <StackLayout Padding="5" Spacing="5">
             <Label HeightRequest="110"  
                           HorizontalOptions="FillAndExpand" 
@@ -92,5 +93,6 @@
             </Button>
             <Label x:Name="messageLabel" />
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

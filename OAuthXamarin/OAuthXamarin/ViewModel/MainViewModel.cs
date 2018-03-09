@@ -110,8 +110,7 @@ namespace OAuthXamarin.ViewModel
                 this.userC = usuario;
                 Debug.WriteLine(userC.IdUser);
             }
-            Settings.userID = userC.IdUser;
-            Debug.WriteLine(Settings.userID);
+            
         }
         async Task ExecuteUpdateList()
         {

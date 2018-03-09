@@ -81,7 +81,14 @@ namespace OAuthXamarin
         public Page GetMainPage()
         {
             InitializeComponent();
-            _NavPage = new NavigationPage(new View.LoginView()) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
+            if (Settings.IsLoggedIn)
+            {
+                _NavPage = new NavigationPage(new View.MainView());
+            }
+            else
+            {
+                _NavPage = new NavigationPage(new View.LoginView()) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
+            }
             return _NavPage;
         }
         public bool IsAuthenticated
